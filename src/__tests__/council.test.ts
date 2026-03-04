@@ -25,10 +25,10 @@ describe('councilAgents', () => {
 })
 
 describe('getAgentById', () => {
-  it('finds strategist', () => {
-    const agent = getAgentById('strategist')
+  it('finds CEO advisor', () => {
+    const agent = getAgentById('ceo')
     expect(agent).toBeDefined()
-    expect(agent!.name).toBe('Alex')
+    expect(agent!.name).toBe('Victoria')
   })
 
   it('returns undefined for unknown', () => {

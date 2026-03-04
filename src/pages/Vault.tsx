@@ -105,22 +105,24 @@ export function Vault() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="max-w-4xl mx-auto space-y-8">
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-white">Vault</h1>
-          <p className="text-slate-400 mt-1">API keys, credentials & secrets. Stored locally in your browser.</p>
+          <h1 className="text-[28px] font-semibold text-label tracking-tight">Vault</h1>
+          <p className="text-[15px] text-label-secondary mt-1">
+            API keys, credentials & secrets. Stored locally in your browser.
+          </p>
         </div>
         <div className="flex gap-2">
           <button
             onClick={exportEnv}
-            className="text-xs px-3 py-1.5 rounded-lg bg-surface-2 text-slate-400 hover:text-white border border-slate-700 transition-colors"
+            className="text-[11px] px-3 py-1.5 rounded-lg glass text-label-tertiary hover:text-label transition-fast"
           >
             Export .env
           </button>
           <button
             onClick={() => setShowAdd(!showAdd)}
-            className="text-xs px-3 py-1.5 rounded-lg bg-brand-500 text-black font-medium hover:bg-brand-600 transition-colors flex items-center gap-1"
+            className="text-[11px] px-3 py-1.5 rounded-lg bg-accent text-canvas font-medium hover:bg-accent-hover transition-fast flex items-center gap-1"
           >
             <Plus className="w-3 h-3" /> Add
           </button>
@@ -129,19 +131,19 @@ export function Vault() {
 
       {/* Add Form */}
       {showAdd && (
-        <div className="bg-surface-1 border border-brand-500/30 rounded-xl p-4 space-y-3 animate-fade-in">
+        <div className="glass rounded-xl p-4 space-y-3 animate-scale-in border-accent/20">
           <div className="grid grid-cols-3 gap-3">
             <input
               type="text"
               value={newEntry.label}
               onChange={e => setNewEntry(p => ({ ...p, label: e.target.value }))}
               placeholder="Label (e.g. Stripe Secret Key)"
-              className="bg-surface-2 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none"
+              className="bg-surface border border-separator-subtle rounded-lg px-3 py-2 text-[13px] text-label placeholder:text-label-quaternary focus:outline-none focus:ring-1 focus:ring-accent/30"
             />
             <select
               value={newEntry.category}
               onChange={e => setNewEntry(p => ({ ...p, category: e.target.value }))}
-              className="bg-surface-2 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white focus:outline-none"
+              className="bg-surface border border-separator-subtle rounded-lg px-3 py-2 text-[13px] text-label focus:outline-none"
             >
               {categories.filter(c => c !== 'All').map(c => (
                 <option key={c} value={c}>{c}</option>
@@ -152,10 +154,13 @@ export function Vault() {
               value={newEntry.value}
               onChange={e => setNewEntry(p => ({ ...p, value: e.target.value }))}
               placeholder="Value"
-              className="bg-surface-2 border border-slate-700 rounded-lg px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none"
+              className="bg-surface border border-separator-subtle rounded-lg px-3 py-2 text-[13px] text-label placeholder:text-label-quaternary focus:outline-none focus:ring-1 focus:ring-accent/30"
             />
           </div>
-          <button onClick={addEntry} className="text-xs px-4 py-1.5 bg-brand-500 text-black rounded-lg font-medium">
+          <button
+            onClick={addEntry}
+            className="text-[11px] px-4 py-1.5 bg-accent text-canvas rounded-lg font-medium hover:bg-accent-hover transition-fast"
+          >
             Save
           </button>
         </div>
@@ -168,10 +173,10 @@ export function Vault() {
             key={c}
             onClick={() => setCategoryFilter(c)}
             className={cn(
-              'px-3 py-1.5 rounded-lg text-xs font-medium transition-colors',
+              'px-3 py-1.5 rounded-lg text-[11px] font-medium transition-fast',
               categoryFilter === c
-                ? 'bg-brand-500/10 text-brand-400 border border-brand-500/30'
-                : 'text-slate-500 hover:text-slate-300 border border-transparent'
+                ? 'bg-accent-muted text-accent'
+                : 'text-label-quaternary hover:text-label-tertiary'
             )}
           >
             {c}
@@ -184,40 +189,49 @@ export function Vault() {
         {filtered.map(entry => (
           <div
             key={entry.id}
-            className="bg-surface-1 border border-slate-800 rounded-lg px-4 py-3 flex items-center gap-4 hover:border-slate-700 transition-colors"
+            className="glass rounded-xl px-4 py-3.5 flex items-center gap-4 hover:glow-accent transition-base"
           >
-            <KeyRound className="w-4 h-4 text-slate-600 shrink-0" />
+            <KeyRound className="w-4 h-4 text-label-quaternary shrink-0" />
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-white">{entry.label}</p>
-              <p className="text-[10px] text-slate-500">{entry.category} · {entry.service}</p>
+              <p className="text-[13px] font-medium text-label">{entry.label}</p>
+              <p className="text-[10px] text-label-quaternary">{entry.category} · {entry.service}</p>
             </div>
             <div className="flex-1 min-w-0">
               {entry.value ? (
-                <code className="text-xs font-mono text-slate-400">
+                <code className="text-[12px] font-mono text-label-tertiary">
                   {revealed.has(entry.id) ? entry.value : '••••••••••••'}
                 </code>
               ) : (
                 <input
                   type="password"
                   placeholder="Set value..."
-                  className="bg-transparent text-xs text-slate-400 placeholder:text-slate-600 focus:outline-none w-full font-mono"
+                  className="bg-transparent text-[12px] text-label-tertiary placeholder:text-label-quaternary focus:outline-none w-full font-mono"
                   onBlur={e => { if (e.target.value) updateValue(entry.id, e.target.value) }}
                   onKeyDown={e => { if (e.key === 'Enter') { updateValue(entry.id, (e.target as HTMLInputElement).value) } }}
                 />
               )}
             </div>
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-0.5">
               {entry.value && (
                 <>
-                  <button onClick={() => toggleReveal(entry.id)} className="p-1.5 rounded-md hover:bg-surface-2 text-slate-500 hover:text-slate-300">
+                  <button
+                    onClick={() => toggleReveal(entry.id)}
+                    className="p-1.5 rounded-md hover:bg-surface text-label-quaternary hover:text-label-secondary transition-fast"
+                  >
                     {revealed.has(entry.id) ? <EyeOff className="w-3.5 h-3.5" /> : <Eye className="w-3.5 h-3.5" />}
                   </button>
-                  <button onClick={() => copyValue(entry)} className="p-1.5 rounded-md hover:bg-surface-2 text-slate-500 hover:text-slate-300">
+                  <button
+                    onClick={() => copyValue(entry)}
+                    className="p-1.5 rounded-md hover:bg-surface text-label-quaternary hover:text-label-secondary transition-fast"
+                  >
                     <Copy className="w-3.5 h-3.5" />
                   </button>
                 </>
               )}
-              <button onClick={() => deleteEntry(entry.id)} className="p-1.5 rounded-md hover:bg-red-500/10 text-slate-600 hover:text-red-400">
+              <button
+                onClick={() => deleteEntry(entry.id)}
+                className="p-1.5 rounded-md hover:bg-destructive/10 text-label-quaternary hover:text-destructive transition-fast"
+              >
                 <Trash2 className="w-3.5 h-3.5" />
               </button>
             </div>
@@ -226,7 +240,7 @@ export function Vault() {
       </div>
 
       {/* Security Notice */}
-      <div className="bg-amber-500/5 border border-amber-500/10 rounded-xl px-4 py-3 text-xs text-amber-300/80 leading-relaxed">
+      <div className="bg-warning/5 border border-warning/10 rounded-xl px-4 py-3 text-[11px] text-warning/80 leading-relaxed">
         <strong>Security note:</strong> Values are stored in your browser's localStorage. For production use, connect Supabase to store encrypted secrets server-side. Never commit secrets to git.
       </div>
     </div>

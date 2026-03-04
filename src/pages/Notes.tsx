@@ -81,12 +81,12 @@ export function Notes() {
     <div className="max-w-6xl mx-auto">
       <div className="flex items-start justify-between mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-white">Notes</h1>
-          <p className="text-slate-400 mt-1">Meeting notes, ideas, and decisions. Tag by business.</p>
+          <h1 className="text-[28px] font-semibold text-label tracking-tight">Notes</h1>
+          <p className="text-[15px] text-label-secondary mt-1">Meeting notes, ideas, and decisions. Tag by business.</p>
         </div>
         <button
           onClick={createNote}
-          className="text-xs px-3 py-1.5 rounded-lg bg-brand-500 text-black font-medium hover:bg-brand-600 transition-colors flex items-center gap-1"
+          className="text-[11px] px-3 py-1.5 rounded-lg bg-accent text-canvas font-medium hover:bg-accent-hover transition-fast flex items-center gap-1"
         >
           <Plus className="w-3 h-3" /> New Note
         </button>
@@ -94,9 +94,9 @@ export function Notes() {
 
       <div className="flex gap-4 h-[calc(100vh-220px)]">
         {/* Notes List */}
-        <div className="w-72 shrink-0 bg-surface-1 border border-slate-800 rounded-xl overflow-y-auto">
+        <div className="w-72 shrink-0 glass rounded-xl overflow-y-auto">
           {notes.length === 0 ? (
-            <div className="text-center py-12 text-slate-500 text-sm">
+            <div className="text-center py-12 text-label-tertiary text-[13px]">
               No notes yet. Create one to get started.
             </div>
           ) : (
@@ -105,21 +105,24 @@ export function Notes() {
                 key={note.id}
                 onClick={() => selectNote(note)}
                 className={cn(
-                  'w-full text-left px-4 py-3 border-b border-slate-800/50 transition-colors',
-                  selectedId === note.id ? 'bg-surface-2' : 'hover:bg-surface-2/50'
+                  'w-full text-left px-4 py-3 border-b border-separator-subtle/50 transition-fast',
+                  selectedId === note.id ? 'bg-accent-muted' : 'hover:bg-surface/50'
                 )}
               >
-                <p className={cn('text-sm font-medium truncate', selectedId === note.id ? 'text-white' : 'text-slate-300')}>
+                <p className={cn(
+                  'text-[13px] font-medium truncate',
+                  selectedId === note.id ? 'text-accent' : 'text-label-secondary'
+                )}>
                   {note.title}
                 </p>
-                <p className="text-[10px] text-slate-500 mt-0.5">
+                <p className="text-[10px] text-label-quaternary mt-0.5">
                   {formatDate(note.updatedAt)}
                   {note.businessId && ` · ${businesses.find(b => b.id === note.businessId)?.name || note.businessId}`}
                 </p>
                 {note.tags.length > 0 && (
-                  <div className="flex gap-1 mt-1">
+                  <div className="flex gap-1 mt-1.5">
                     {note.tags.slice(0, 3).map(tag => (
-                      <span key={tag} className="text-[9px] px-1.5 py-0.5 rounded bg-surface-3 text-slate-500">
+                      <span key={tag} className="text-[9px] px-1.5 py-0.5 rounded-md bg-surface/60 text-label-quaternary">
                         {tag}
                       </span>
                     ))}
@@ -131,42 +134,48 @@ export function Notes() {
         </div>
 
         {/* Editor */}
-        <div className="flex-1 bg-surface-1 border border-slate-800 rounded-xl flex flex-col overflow-hidden">
+        <div className="flex-1 glass rounded-xl flex flex-col overflow-hidden">
           {selected ? (
             <>
-              <div className="px-4 py-3 border-b border-slate-800 flex items-center gap-3">
+              <div className="px-4 py-3 border-b border-separator-subtle flex items-center gap-3">
                 <input
                   type="text"
                   value={editTitle}
                   onChange={e => setEditTitle(e.target.value)}
-                  className="flex-1 bg-transparent text-lg font-semibold text-white focus:outline-none"
+                  className="flex-1 bg-transparent text-[17px] font-semibold text-label focus:outline-none tracking-tight"
                   placeholder="Note title..."
                 />
                 <select
                   value={editBusiness}
                   onChange={e => setEditBusiness(e.target.value)}
-                  className="bg-surface-2 border border-slate-700 rounded-lg px-2 py-1 text-xs text-white focus:outline-none"
+                  className="bg-surface border border-separator-subtle rounded-lg px-2 py-1 text-[11px] text-label focus:outline-none"
                 >
                   <option value="">No business</option>
                   {businesses.map(b => (
                     <option key={b.id} value={b.id}>{b.name}</option>
                   ))}
                 </select>
-                <button onClick={saveNote} className="p-1.5 rounded-md hover:bg-surface-2 text-slate-400 hover:text-brand-400">
+                <button
+                  onClick={saveNote}
+                  className="p-1.5 rounded-md hover:bg-surface text-label-tertiary hover:text-accent transition-fast"
+                >
                   <Save className="w-4 h-4" />
                 </button>
-                <button onClick={() => deleteNote(selected.id)} className="p-1.5 rounded-md hover:bg-red-500/10 text-slate-500 hover:text-red-400">
+                <button
+                  onClick={() => deleteNote(selected.id)}
+                  className="p-1.5 rounded-md hover:bg-destructive/10 text-label-quaternary hover:text-destructive transition-fast"
+                >
                   <Trash2 className="w-4 h-4" />
                 </button>
               </div>
 
-              <div className="px-4 py-2 border-b border-slate-800/50 flex items-center gap-2">
-                <Tag className="w-3 h-3 text-slate-500" />
+              <div className="px-4 py-2 border-b border-separator-subtle/50 flex items-center gap-2">
+                <Tag className="w-3 h-3 text-label-quaternary" />
                 <input
                   type="text"
                   value={editTags}
                   onChange={e => setEditTags(e.target.value)}
-                  className="flex-1 bg-transparent text-xs text-slate-400 focus:outline-none"
+                  className="flex-1 bg-transparent text-[11px] text-label-tertiary focus:outline-none"
                   placeholder="Tags (comma separated)..."
                 />
               </div>
@@ -175,12 +184,12 @@ export function Notes() {
                 value={editContent}
                 onChange={e => setEditContent(e.target.value)}
                 onBlur={saveNote}
-                className="flex-1 bg-transparent text-sm text-slate-300 leading-relaxed p-4 resize-none focus:outline-none font-mono"
+                className="flex-1 bg-transparent text-[13px] text-label-secondary leading-relaxed p-4 resize-none focus:outline-none font-mono"
                 placeholder="Start typing your note..."
               />
             </>
           ) : (
-            <div className="flex-1 flex items-center justify-center text-slate-500 text-sm">
+            <div className="flex-1 flex items-center justify-center text-label-tertiary text-[13px]">
               Select a note or create a new one
             </div>
           )}

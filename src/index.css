@@ -1,53 +1,109 @@
 @import "tailwindcss";
 
+/* =============================================
+   JONY IVE DESIGN SYSTEM
+   Principles: Simplicity through depth. Reduction.
+   Material honesty. Care as signal. Order from complexity.
+   ============================================= */
+
 @theme {
-  --color-brand-50: #fffbeb;
-  --color-brand-100: #fef3c7;
-  --color-brand-200: #fde68a;
-  --color-brand-300: #fcd34d;
-  --color-brand-400: #fbbf24;
-  --color-brand-500: #f59e0b;
-  --color-brand-600: #d97706;
-  --color-brand-700: #b45309;
-  --color-brand-800: #92400e;
-  --color-brand-900: #78350f;
+  /* === Apple Dark Mode Surface Scale === */
+  --color-canvas: #000000;
+  --color-base: #1C1C1E;
+  --color-surface: #2C2C2E;
+  --color-elevated: #3A3A3C;
+  --color-overlay: #48484A;
 
-  --color-surface-0: #020617;
-  --color-surface-1: #0f172a;
-  --color-surface-2: #1e293b;
-  --color-surface-3: #334155;
+  /* === Glass Backgrounds (with backdrop-filter) === */
+  --color-glass-subtle: rgba(28, 28, 30, 0.72);
+  --color-glass-medium: rgba(44, 44, 46, 0.72);
+  --color-glass-strong: rgba(58, 58, 60, 0.82);
 
-  --font-sans: "Inter", system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", monospace;
+  /* === Text (Apple label hierarchy) === */
+  --color-label: #FFFFFF;
+  --color-label-secondary: rgba(235, 235, 245, 0.6);
+  --color-label-tertiary: rgba(235, 235, 245, 0.3);
+  --color-label-quaternary: rgba(235, 235, 245, 0.18);
+
+  /* === Borders === */
+  --color-separator: rgba(84, 84, 88, 0.6);
+  --color-separator-subtle: rgba(255, 255, 255, 0.08);
+  --color-separator-opaque: #38383A;
+
+  /* === Accent (Amber — Mike's brand) === */
+  --color-accent: #F59E0B;
+  --color-accent-hover: #FBBF24;
+  --color-accent-muted: rgba(245, 158, 11, 0.15);
+
+  /* === Semantic === */
+  --color-success: #30D158;
+  --color-warning: #FFD60A;
+  --color-destructive: #FF453A;
+  --color-info: #0A84FF;
+
+  /* === Typography === */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif;
+  --font-mono: "SF Mono", "Fira Code", "JetBrains Mono", monospace;
+
+  /* === Border Radius (continuous curvature feel) === */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
 }
 
+/* === Base === */
 body {
   font-family: var(--font-sans);
-  background: var(--color-surface-0);
+  background: var(--color-canvas);
+  color: var(--color-label);
   margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
+/* === Scrollbar (minimal, Ive-style) === */
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #475569; }
+::-webkit-scrollbar-thumb { background: var(--color-overlay); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #636366; }
 
+/* === Glass Surface (frosted material) === */
 .glass {
-  background: rgba(15, 23, 42, 0.8);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(148, 163, 184, 0.1);
+  background: var(--color-glass-subtle);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--color-separator-subtle);
 }
 
-.glow-brand {
-  box-shadow: 0 0 24px rgba(245, 158, 11, 0.12);
+.glass-elevated {
+  background: var(--color-glass-strong);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+  border: 1px solid var(--color-separator-subtle);
 }
 
+/* === Glow (subtle, purposeful) === */
+.glow-accent {
+  box-shadow: 0 0 24px var(--color-accent-muted);
+}
+
+/* === Animations (spring physics approximation) === */
 @keyframes fade-in {
-  from { opacity: 0; transform: translateY(6px); }
+  from { opacity: 0; transform: translateY(4px); }
   to { opacity: 1; transform: translateY(0); }
 }
 .animate-fade-in {
-  animation: fade-in 0.25s ease-out forwards;
+  animation: fade-in 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes scale-in {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
+}
+.animate-scale-in {
+  animation: scale-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
 @keyframes pulse-dot {
@@ -56,4 +112,15 @@ body {
 }
 .animate-pulse-dot {
   animation: pulse-dot 2s ease-in-out infinite;
+}
+
+/* === Transitions (Ive-style timing) === */
+.transition-fast { transition: all 150ms cubic-bezier(0.25, 0.1, 0.25, 1); }
+.transition-base { transition: all 250ms cubic-bezier(0.25, 0.46, 0.45, 0.94); }
+.transition-spring { transition: all 400ms cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+/* === Selection === */
+::selection {
+  background: rgba(245, 158, 11, 0.3);
+  color: white;
 }
