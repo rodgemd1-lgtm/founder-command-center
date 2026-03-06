@@ -24,8 +24,8 @@ describe('getStatusColor', () => {
     expect(getStatusColor('blocked')).toContain('red')
   })
 
-  it('returns slate for unknown', () => {
-    expect(getStatusColor('unknown')).toContain('slate')
+  it('returns gray for unknown', () => {
+    expect(getStatusColor('unknown')).toContain('gray')
   })
 })
 
@@ -34,12 +34,12 @@ describe('getProgressColor', () => {
     expect(getProgressColor(80)).toContain('emerald')
   })
 
-  it('returns brand for medium progress', () => {
-    expect(getProgressColor(60)).toContain('brand')
+  it('returns amber for medium progress', () => {
+    expect(getProgressColor(60)).toContain('amber')
   })
 
-  it('returns amber for low progress', () => {
-    expect(getProgressColor(30)).toContain('amber')
+  it('returns amber for low-medium progress', () => {
+    expect(getProgressColor(40)).toContain('amber')
   })
 
   it('returns red for very low progress', () => {

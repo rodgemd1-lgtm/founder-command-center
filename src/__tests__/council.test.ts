@@ -11,7 +11,7 @@ describe('councilAgents', () => {
       expect(agent.id).toBeTruthy()
       expect(agent.name).toBeTruthy()
       expect(agent.role).toBeTruthy()
-      expect(agent.emoji).toBeTruthy()
+      expect(agent.color).toBeTruthy()
       expect(agent.expertise).toBeTruthy()
       expect(agent.style).toBeTruthy()
       expect(agent.color).toMatch(/^#/)

@@ -1,45 +1,45 @@
 @import "tailwindcss";
 
 /* =============================================
-   JONY IVE DESIGN SYSTEM
+   JONY IVE DESIGN SYSTEM — LIGHT THEME
    Principles: Simplicity through depth. Reduction.
    Material honesty. Care as signal. Order from complexity.
    ============================================= */
 
 @theme {
-  /* === Apple Dark Mode Surface Scale === */
-  --color-canvas: #000000;
-  --color-base: #1C1C1E;
-  --color-surface: #2C2C2E;
-  --color-elevated: #3A3A3C;
-  --color-overlay: #48484A;
+  /* === Apple Light Mode Surface Scale === */
+  --color-canvas: #FFFFFF;
+  --color-base: #F9FAFB;
+  --color-surface: #F3F4F6;
+  --color-elevated: #E5E7EB;
+  --color-overlay: #D1D5DB;
 
   /* === Glass Backgrounds (with backdrop-filter) === */
-  --color-glass-subtle: rgba(28, 28, 30, 0.72);
-  --color-glass-medium: rgba(44, 44, 46, 0.72);
-  --color-glass-strong: rgba(58, 58, 60, 0.82);
+  --color-glass-subtle: rgba(255, 255, 255, 0.72);
+  --color-glass-medium: rgba(255, 255, 255, 0.85);
+  --color-glass-strong: rgba(255, 255, 255, 0.95);
 
   /* === Text (Apple label hierarchy) === */
-  --color-label: #FFFFFF;
-  --color-label-secondary: rgba(235, 235, 245, 0.6);
-  --color-label-tertiary: rgba(235, 235, 245, 0.3);
-  --color-label-quaternary: rgba(235, 235, 245, 0.18);
+  --color-label: #111827;
+  --color-label-secondary: rgba(55, 65, 81, 0.8);
+  --color-label-tertiary: rgba(107, 114, 128, 0.7);
+  --color-label-quaternary: rgba(156, 163, 175, 0.5);
 
   /* === Borders === */
-  --color-separator: rgba(84, 84, 88, 0.6);
-  --color-separator-subtle: rgba(255, 255, 255, 0.08);
-  --color-separator-opaque: #38383A;
+  --color-separator: rgba(0, 0, 0, 0.06);
+  --color-separator-subtle: rgba(0, 0, 0, 0.04);
+  --color-separator-opaque: #E5E7EB;
 
   /* === Accent (Amber — Mike's brand) === */
   --color-accent: #F59E0B;
-  --color-accent-hover: #FBBF24;
-  --color-accent-muted: rgba(245, 158, 11, 0.15);
+  --color-accent-hover: #D97706;
+  --color-accent-muted: rgba(245, 158, 11, 0.12);
 
   /* === Semantic === */
-  --color-success: #30D158;
-  --color-warning: #FFD60A;
-  --color-destructive: #FF453A;
-  --color-info: #0A84FF;
+  --color-success: #16A34A;
+  --color-warning: #CA8A04;
+  --color-destructive: #DC2626;
+  --color-info: #2563EB;
 
   /* === Typography === */
   --font-sans: -apple-system, BlinkMacSystemFont, "Inter", system-ui, sans-serif;
@@ -67,7 +67,7 @@ body {
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--color-overlay); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #636366; }
+::-webkit-scrollbar-thumb:hover { background: #9CA3AF; }
 
 /* === Glass Surface (frosted material) === */
 .glass {
@@ -84,9 +84,9 @@ body {
   border: 1px solid var(--color-separator-subtle);
 }
 
-/* === Glow (subtle, purposeful) === */
+/* === Glow (subtle, purposeful — reduced for light bg) === */
 .glow-accent {
-  box-shadow: 0 0 24px var(--color-accent-muted);
+  box-shadow: 0 0 16px var(--color-accent-muted);
 }
 
 /* === Animations (spring physics approximation) === */
@@ -122,5 +122,5 @@ body {
 /* === Selection === */
 ::selection {
   background: rgba(245, 158, 11, 0.3);
-  color: white;
+  color: #111827;
 }

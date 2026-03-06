@@ -1,99 +1,165 @@
-import type { ReactNode } from 'react'
-import { NavLink, useLocation } from 'react-router-dom'
+import { useState } from 'react'
+import { NavLink, Outlet } from 'react-router-dom'
 import {
   LayoutDashboard,
-  Brain,
-  Users,
-  UsersRound,
-  KeyRound,
-  StickyNote,
   Dumbbell,
   Sparkles,
   Cpu,
   Wrench,
-  ChevronRight,
+  BookOpen,
+  Users,
+  Scale,
+  Newspaper,
+  Lock,
+  FileText,
+  LogOut,
+  Menu,
+  X,
+  Zap,
 } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { businesses } from '@/lib/data'
+import { useAuth } from '@/hooks/useAuth'
 
-const businessIcons: Record<string, typeof Dumbbell> = {
-  FITNESS: Dumbbell,
-  INSTAGRAM: Sparkles,
-  INTELLIGENCE: Cpu,
-  AUTOMOTIVE: Wrench,
+/* ------------------------------------------------------------------ */
+/*  Stage badge colors                                                 */
+/* ------------------------------------------------------------------ */
+type Stage = 'IDEA' | 'MVP' | 'LAUNCH' | 'GROWTH' | 'SCALE'
+
+const stageBadgeClass: Record<Stage, string> = {
+  IDEA:   'bg-gray-100 text-gray-500',
+  MVP:    'bg-blue-50 text-blue-600',
+  LAUNCH: 'bg-orange-50 text-orange-600',
+  GROWTH: 'bg-green-50 text-green-600',
+  SCALE:  'bg-purple-50 text-purple-600',
 }
 
-const navSections = [
+function StageBadge({ stage }: { stage: Stage }) {
+  return (
+    <span
+      className={cn(
+        'ml-auto text-[10px] font-medium px-1.5 py-0.5 rounded-full leading-none shrink-0',
+        stageBadgeClass[stage],
+      )}
+    >
+      {stage}
+    </span>
+  )
+}
+
+/* ------------------------------------------------------------------ */
+/*  Navigation data                                                    */
+/* ------------------------------------------------------------------ */
+interface NavItem {
+  to: string
+  icon: LucideIcon
+  label: string
+  stage?: Stage
+  end?: boolean
+}
+
+interface NavSection {
+  header: string
+  items: NavItem[]
+}
+
+const sections: NavSection[] = [
   {
-    label: 'Overview',
+    header: 'PORTFOLIO',
     items: [
-      { to: '/', icon: LayoutDashboard, label: 'Dashboard' },
+      { to: '/', icon: LayoutDashboard, label: 'Dashboard', end: true },
+      { to: '/experts?expert=jake-cofounder', icon: Zap, label: 'Jake (Co-Founder)' },
     ],
   },
   {
-    label: 'Businesses',
-    items: businesses.map(b => ({
-      to: `/business/${b.slug}`,
-      icon: businessIcons[b.tag] || Cpu,
-      label: b.name,
-      status: b.status,
-    })),
+    header: 'BUSINESSES',
+    items: [
+      { to: '/business/transformfit', icon: Dumbbell, label: 'TransformFit', stage: 'MVP' },
+      { to: '/business/viral-architect', icon: Sparkles, label: 'Viral Architect Hub', stage: 'MVP' },
+      { to: '/business/intelligence-engine', icon: Cpu, label: 'Intelligence Engine', stage: 'MVP' },
+      { to: '/business/automotive-os', icon: Wrench, label: 'Automotive Repair OS', stage: 'IDEA' },
+    ],
   },
   {
-    label: 'Tools',
+    header: 'TOOLS',
     items: [
-      { to: '/intelligence', icon: Brain, label: 'Intelligence' },
-      { to: '/council', icon: Users, label: 'Elite Council' },
-      { to: '/agents', icon: UsersRound, label: 'Agent Roster' },
-      { to: '/vault', icon: KeyRound, label: 'Vault' },
-      { to: '/notes', icon: StickyNote, label: 'Notes' },
+      { to: '/intelligence', icon: BookOpen, label: 'Intelligence' },
+      { to: '/experts', icon: Users, label: 'Domain Experts' },
+      { to: '/decisions', icon: Scale, label: 'Decisions' },
+      { to: '/research', icon: Newspaper, label: 'Research Feed' },
+      { to: '/vault', icon: Lock, label: 'Vault' },
+      { to: '/notes', icon: FileText, label: 'Notes' },
     ],
   },
 ]
 
-function StatusDot({ status }: { status?: string }) {
-  const color = status === 'active' ? 'bg-success' : status === 'pre-launch' ? 'bg-overlay' : 'bg-warning'
-  return <span className={cn('w-1.5 h-1.5 rounded-full animate-pulse-dot', color)} />
-}
-
-export function AppShell({ children }: { children: ReactNode }) {
-  const location = useLocation()
+/* ------------------------------------------------------------------ */
+/*  AppShell layout                                                    */
+/* ------------------------------------------------------------------ */
+export function AppShell() {
+  const { user, signOut } = useAuth()
+  const [sidebarOpen, setSidebarOpen] = useState(false)
 
   return (
-    <div className="flex h-screen overflow-hidden bg-canvas">
-      {/* Sidebar — Jony Ive: restrained, hierarchical, generous spacing */}
-      <aside className="w-60 shrink-0 bg-base border-r border-separator-subtle flex flex-col overflow-y-auto">
-        <div className="px-5 pt-6 pb-5">
-          <h1 className="text-[15px] font-semibold text-label tracking-tight">
-            Founder<span className="text-accent">OS</span>
-          </h1>
-          <p className="text-[11px] text-label-tertiary mt-0.5 tracking-wide">Command Center</p>
+    <div className="flex h-screen overflow-hidden bg-[#F9FAFB]">
+      {/* Mobile overlay */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/30 md:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      {/* Sidebar */}
+      <aside
+        className={cn(
+          'fixed z-50 top-0 left-0 h-full w-60 bg-white border-r border-gray-200 flex flex-col overflow-y-auto transition-transform duration-200',
+          'md:relative md:translate-x-0',
+          sidebarOpen ? 'translate-x-0' : '-translate-x-full',
+        )}
+      >
+        {/* Brand */}
+        <div className="px-5 pt-6 pb-5 flex items-center justify-between">
+          <div>
+            <h1 className="text-[15px] font-semibold text-gray-900 tracking-tight">
+              Founder<span className="text-amber-500">OS</span>
+            </h1>
+            <p className="text-[11px] text-gray-400 mt-0.5 tracking-wide">Command Center</p>
+          </div>
+          <button
+            onClick={() => setSidebarOpen(false)}
+            className="md:hidden p-1 text-gray-400 hover:text-gray-600"
+          >
+            <X className="w-5 h-5" />
+          </button>
         </div>
 
-        <nav className="flex-1 px-3 pb-4 space-y-7">
-          {navSections.map(section => (
-            <div key={section.label}>
-              <p className="px-3 mb-2 text-[11px] font-medium uppercase tracking-[0.12em] text-label-quaternary">
-                {section.label}
+        {/* Nav sections */}
+        <nav className="flex-1 px-3 pb-4 space-y-6">
+          {sections.map((section) => (
+            <div key={section.header}>
+              <p className="px-3 mb-2 text-[11px] font-medium uppercase tracking-[0.12em] text-gray-400">
+                {section.header}
               </p>
-              <ul className="space-y-px">
-                {section.items.map(item => (
+              <ul className="space-y-0.5">
+                {section.items.map((item) => (
                   <li key={item.to}>
                     <NavLink
                       to={item.to}
-                      end={item.to === '/'}
+                      end={item.end}
+                      onClick={() => setSidebarOpen(false)}
                       className={({ isActive }) =>
                         cn(
-                          'flex items-center gap-3 px-3 py-2 rounded-lg text-[13px] transition-base group',
+                          'flex items-center gap-3 px-3 py-2 rounded-lg text-[13px] transition-colors group',
                           isActive
-                            ? 'bg-accent-muted text-accent'
-                            : 'text-label-secondary hover:text-label hover:bg-surface/50'
+                            ? 'bg-amber-50 text-amber-700 border-l-2 border-amber-500 pl-[10px]'
+                            : 'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
                         )
                       }
                     >
-                      <item.icon className="w-[16px] h-[16px] shrink-0 opacity-80" />
+                      <item.icon className="w-4 h-4 shrink-0" />
                       <span className="truncate flex-1">{item.label}</span>
-                      {'status' in item && <StatusDot status={item.status} />}
+                      {item.stage && <StageBadge stage={item.stage} />}
                     </NavLink>
                   </li>
                 ))}
@@ -102,29 +168,36 @@ export function AppShell({ children }: { children: ReactNode }) {
           ))}
         </nav>
 
-        <div className="px-5 py-4 border-t border-separator-subtle">
-          <p className="text-[11px] text-label-quaternary">Mike Rodgers</p>
-          <p className="text-[10px] text-label-quaternary/60">Apex Ventures</p>
+        {/* Footer with user info & sign out */}
+        <div className="px-5 py-4 border-t border-gray-200">
+          <p className="text-[11px] text-gray-500 truncate">{user?.email ?? 'Not signed in'}</p>
+          <div className="flex items-center justify-between mt-1">
+            <p className="text-[10px] text-gray-400">v0.5.0</p>
+            <button
+              onClick={signOut}
+              className="flex items-center gap-1 text-[10px] text-gray-400 hover:text-red-500 transition-colors"
+              title="Sign out"
+            >
+              <LogOut className="w-3 h-3" />
+              Sign out
+            </button>
+          </div>
         </div>
       </aside>
 
-      {/* Main Content */}
+      {/* Main content */}
       <main className="flex-1 overflow-y-auto">
-        {/* Breadcrumb bar — frosted glass */}
-        <header className="sticky top-0 z-10 glass px-6 py-3 flex items-center gap-2 text-[12px] text-label-tertiary">
-          <NavLink to="/" className="hover:text-label-secondary transition-fast">Home</NavLink>
-          {location.pathname !== '/' && (
-            <>
-              <ChevronRight className="w-3 h-3 opacity-40" />
-              <span className="text-label-secondary capitalize">
-                {decodeURIComponent(location.pathname.split('/').filter(Boolean).join(' / '))}
-              </span>
-            </>
-          )}
-        </header>
-
-        <div className="px-8 py-8 animate-fade-in">
-          {children}
+        {/* Mobile header */}
+        <div className="sticky top-0 z-30 flex items-center gap-3 px-4 py-3 bg-white border-b border-gray-200 md:hidden">
+          <button onClick={() => setSidebarOpen(true)} className="p-1 text-gray-600 hover:text-gray-900">
+            <Menu className="w-5 h-5" />
+          </button>
+          <h1 className="text-[14px] font-semibold text-gray-900 tracking-tight">
+            Founder<span className="text-amber-500">OS</span>
+          </h1>
+        </div>
+        <div className="px-4 py-6 md:px-8 md:py-8">
+          <Outlet />
         </div>
       </main>
     </div>

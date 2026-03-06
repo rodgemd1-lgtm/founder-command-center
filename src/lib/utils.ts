@@ -7,29 +7,34 @@ export function cn(...inputs: ClassValue[]) {
 
 export function getStatusColor(status: string): string {
   switch (status) {
-    case 'on-track': return 'text-emerald-400'
-    case 'active': return 'text-emerald-400'
-    case 'at-risk': return 'text-amber-400'
-    case 'blocked': return 'text-red-400'
-    case 'pre-launch': return 'text-slate-400'
-    case 'deferred': return 'text-slate-500'
-    default: return 'text-slate-400'
+    case 'on-track': return 'text-emerald-700'
+    case 'active': return 'text-emerald-700'
+    case 'completed': return 'text-emerald-700'
+    case 'done': return 'text-emerald-700'
+    case 'at-risk': return 'text-amber-700'
+    case 'in-progress': return 'text-amber-700'
+    case 'partial': return 'text-amber-700'
+    case 'blocked': return 'text-red-700'
+    case 'critical': return 'text-red-700'
+    case 'pre-launch': return 'text-gray-600'
+    case 'deferred': return 'text-gray-600'
+    default: return 'text-gray-600'
   }
 }
 
 export function getStatusDot(status: string): string {
   switch (status) {
-    case 'on-track': case 'active': return 'bg-emerald-400'
-    case 'at-risk': return 'bg-amber-400'
-    case 'blocked': return 'bg-red-400'
-    default: return 'bg-slate-500'
+    case 'on-track': case 'active': case 'completed': case 'done': return 'bg-emerald-600'
+    case 'at-risk': case 'in-progress': case 'partial': return 'bg-amber-600'
+    case 'blocked': case 'critical': return 'bg-red-600'
+    default: return 'bg-gray-400'
   }
 }
 
 export function getProgressColor(pct: number): string {
-  if (pct >= 75) return 'bg-emerald-500'
-  if (pct >= 50) return 'bg-brand-500'
-  if (pct >= 25) return 'bg-amber-500'
+  if (pct >= 80) return 'bg-emerald-600'
+  if (pct >= 60) return 'bg-amber-500'
+  if (pct >= 40) return 'bg-amber-600'
   return 'bg-red-500'
 }
 
